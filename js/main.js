@@ -6,16 +6,6 @@ var terminal = document.getElementById("terminal");
 
 var git = 0;
 
-const USERNAME = "tim";
-const PASSWORD = "tim";
-
-var loggingIn = false;
-var inputUsername = "";
-var inputtedUsername = false;
-
-var inputPassword = "";
-var inputtedPassword = false;
-
 var commands = [];
 var isRoot = false;
 
@@ -39,91 +29,39 @@ function enterKey(e) {
 		document.location.reload(true);
 	}
 
-	// login mode?
-	if (loggingIn) {
-		if (e.keyCode == 13) {
-			if (!inputtedUsername) {
-				inputtedUsername = true;
-				textarea.value = "";
-				addLine("Username: " + inputUsername, "", 0);
-			} else if (inputtedUsername && !inputtedPassword) {
-				inputtedPassword = true;
-			}
+	if (e.keyCode == 13) {
+		commands.push(command.innerHTML);
+		git = commands.length;
+		addLine(
+			`${isRoot ? "root" : "visitor"}@tim.gabrikowski.de:~$ ${
+				command.innerHTML
+			}`,
+			"no-animation",
+			0
+		);
+		commander(command.innerHTML.toLowerCase());
+		liner.setAttribute(
+			"data-before",
+			`${isRoot ? "root" : "visitor"}@tim.gabrikowski.de:~$`
+		);
+		command.innerHTML = "";
+		textarea.value = "";
+	}
 
-			if (inputUsername == USERNAME && inputPassword == PASSWORD) {
-				inputUsername = "";
-				inputPassword = "";
-
-				addLine("Correct Password", "", 0);
-
-				isRoot = true;
-				liner.setAttribute(
-					"data-before",
-					`${isRoot ? "root" : "visitor"}@tim.gabrikowski.de:~$`
-				);
-
-				command.innerHTML = "";
-				textarea.value = "";
-				loggingIn = false;
-				liner.classList.remove("password");
-			}
-		}
-		if (!inputtedUsername) {
-			liner.classList.add("username");
-
-			inputUsername = textarea.value;
-		} else if (inputtedUsername && !inputtedPassword) {
-			liner.classList.remove("username");
-			liner.classList.add("password");
-			let hideChar = "*";
-			let inputLength = textarea.value.length;
-
-			command.innerHTML = hideChar.repeat(inputLength);
-
-			inputPassword = textarea.value;
+	// prev inputs
+	if (e.keyCode == 38 && git != 0) {
+		git -= 1;
+		textarea.value = commands[git];
+		command.innerHTML = textarea.value;
+	}
+	if (e.keyCode == 40 && git != commands.length) {
+		git += 1;
+		if (commands[git] === undefined) {
+			textarea.value = "";
 		} else {
-			addLine("Wrong password", "error", 0);
-			command.innerHTML = "";
-			textarea.value = "";
-			inputPassword = false;
-			liner.classList.remove("password");
-		}
-		// not login mode
-	} else {
-		if (e.keyCode == 13) {
-			commands.push(command.innerHTML);
-			git = commands.length;
-			addLine(
-				`${isRoot ? "root" : "visitor"}@tim.gabrikowski.de:~$ ${
-					command.innerHTML
-				}`,
-				"no-animation",
-				0
-			);
-			commander(command.innerHTML.toLowerCase());
-			liner.setAttribute(
-				"data-before",
-				`${isRoot ? "root" : "visitor"}@tim.gabrikowski.de:~$`
-			);
-			command.innerHTML = "";
-			textarea.value = "";
-		}
-
-		// prev inputs
-		if (e.keyCode == 38 && git != 0) {
-			git -= 1;
 			textarea.value = commands[git];
-			command.innerHTML = textarea.value;
 		}
-		if (e.keyCode == 40 && git != commands.length) {
-			git += 1;
-			if (commands[git] === undefined) {
-				textarea.value = "";
-			} else {
-				textarea.value = commands[git];
-			}
-			command.innerHTML = textarea.value;
-		}
+		command.innerHTML = textarea.value;
 	}
 }
 
@@ -139,12 +77,6 @@ function commander(cmd) {
 		//login
 		case "login":
 			if (!isRoot) {
-				liner.classList.add("username");
-				loggingIn = true;
-				inputUsername = "";
-				inputtedUsername = false;
-				inputPassword = "";
-				inputtedPassword = false;
 			} else {
 				addLine("Already logged in", "", 0);
 			}
@@ -155,6 +87,11 @@ function commander(cmd) {
 			addLine("<br>", "", 0);
 			loopLines(commands, "color2", 80);
 			addLine("<br>", "command", 80 * commands.length + 50);
+			break;
+
+		// banner
+		case "banner":
+			loopLines(banner, "", 80);
 			break;
 
 		// clear
