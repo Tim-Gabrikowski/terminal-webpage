@@ -21,16 +21,17 @@
 			<textarea
 				type="text"
 				id="texter"
-				onkeyup="typeIt(this, event)"
+				<!-- onkeyup="typeIt(this, event)"
 				onkeydown="typeIt(this, event); 
                    moveIt(this.value.length, event)"
-				onkeypress="typeIt(this, event);"
+				onkeypress="typeIt(this, event);" -->
 				autofocus
 			></textarea>
 			<div id="liner">
-				<span id="typer"></span><b class="cursor" id="cursor">█</b>
+				<span id="typer"></span><b class="cursor" id="cursor">█</b><b id="spinner"></b>
 			</div>
 		</div>
+		<script src="js/services.js"></script>
 		<script src="js/caret.js"></script>
 		<script src="js/commands.js"></script>
 		<script src="js/main.js"></script>

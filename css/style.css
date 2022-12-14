@@ -1,134 +1,176 @@
 body {
-	margin: 0;
-	padding: 15px 20px;
-	min-height: 99%;
-	width: 100%;
-	min-width: 550px;
-	color: #519975;
-	background: #300a24;
-	font-family: cursor, monospace;
-	overflow-x: hidden;
+    margin: 0;
+    padding: 15px 20px;
+    min-height: 99%;
+    width: 100%;
+    min-width: 550px;
+    color: #519975;
+    background: #300a24;
+    font-family: cursor, monospace;
+    overflow-x: hidden;
 }
+
 ::selection {
-	color: #211830;
-	background-color: #519975;
+    color: #211830;
+    background-color: #519975;
 }
+
 ::-moz-selection {
-	color: #211830;
-	background-color: #519975;
+    color: #211830;
+    background-color: #519975;
 }
+
 textarea {
-	left: -1000px;
-	position: absolute;
+    left: -1000px;
+    position: absolute;
 }
+
 b {
-	font-weight: bold;
-	text-decoration: underline;
+    font-weight: bold;
+    text-decoration: underline;
 }
+
 /* Cursor Start */
 .cursor {
-	font-size: 12px;
-	color: #73abad;
-	background-color: #73abad;
-	position: relative;
-	opacity: 1;
-	height: 1.5em;
-	width: 10px;
-	max-width: 10px;
-	transform: translateY(4px);
-	overflow: hidden;
-	text-indent: -5px;
-	display: inline-block;
-	text-decoration: blink;
-	animation: blinker 1s linear infinite;
+    font-size: 12px;
+    color: #73abad;
+    background-color: #73abad;
+    position: relative;
+    opacity: 1;
+    height: 1.5em;
+    width: 10px;
+    max-width: 10px;
+    transform: translateY(4px);
+    overflow: hidden;
+    text-indent: -5px;
+    display: inline-block;
+    text-decoration: blink;
+    animation: blinker 1s linear infinite;
 }
+
 @keyframes blinker {
-	50% {
-		opacity: 0;
-	}
+    50% {
+        opacity: 0;
+    }
 }
+
 #command {
-	cursor: text;
-	height: 50px;
-	color: #73abad;
+    cursor: text;
+    height: 50px;
+    color: #73abad;
 }
+
 #liner {
-	line-height: 1.3em;
-	margin-top: -2px;
-	animation: show 0.5s ease forwards;
-	animation-delay: 1.2s;
-	opacity: 0;
+    line-height: 1.3em;
+    margin-top: -2px;
+    animation: show 0.5s ease forwards;
+    animation-delay: 1.2s;
+    opacity: 0;
 }
+
 #liner::before {
-	color: #519975;
-	content: attr(data-before);
+    color: #519975;
+    content: attr(data-before);
 }
+
 #liner.password::before {
-	content: "Password:";
+    content: "Password:";
 }
+
 #liner.username::before {
-	content: "Username:";
+    content: "Username:";
 }
+
 @keyframes show {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
+
 /* Cursor End */
 p {
-	display: block;
-	line-height: 1.3em;
-	margin: 0;
-	overflow: hidden;
-	white-space: nowrap;
-	margin: 0;
-	letter-spacing: 0.05em;
-	animation: typing 0.5s steps(30, end);
+    display: block;
+    line-height: 1.3em;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+    letter-spacing: 0.05em;
+    animation: typing 0.5s steps(30, end);
 }
+
 .no-animation {
-	animation: typing 0 steps(30, end);
+    animation: typing 0 steps(30, end);
 }
+
 .margin {
-	margin-left: 20px;
+    margin-left: 20px;
 }
+
 @keyframes typing {
-	from {
-		width: 0;
-	}
-	to {
-		width: 100%;
-	}
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
 }
+
 .index {
-	color: #dcdccc;
+    color: #dcdccc;
 }
+
 .color2 {
-	color: #b89076;
+    color: #b89076;
 }
+
 .command {
-	color: #73abad;
-	text-shadow: 0 0 5px #73abad;
+    color: #73abad;
+    text-shadow: 0 0 5px #73abad;
 }
+
 .error {
-	color: #b89076;
+    color: #b89076;
 }
+
 .white {
-	color: #fff;
+    color: #fff;
 }
+
 .inherit,
 a {
-	color: #9c8394;
+    color: #9c8394;
 }
+
 a {
-	text-decoration: inherit;
+    text-decoration: inherit;
 }
+
 a:hover {
-	background: #73abad;
-	color: #211830;
+    background: #73abad;
+    color: #211830;
 }
+
 a:focus {
-	outline: 0;
+    outline: 0;
+}
+
+.blurrText {
+    color: transparent;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 1);
+}
+.loader {
+    border-top: 2px solid #fff;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

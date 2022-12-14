@@ -36,3 +36,6 @@ function moveIt(count, e) {
 function alert(txt) {
 	console.log(txt);
 }
+function timeout(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
