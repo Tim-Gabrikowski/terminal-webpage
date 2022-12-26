@@ -59,14 +59,35 @@ class securityService extends service {
         super(name);
     }
     on(cmd){
-        console.log(cmd);
+        if(cmd.startsWith("-help")) return {loginProcess: false, msg: this.help(), style: "white"};
+        if(cmd.length < 4) return {loginProcess: false, msg: this.help(), style: "white"};
+        this.username = cmd.substring(3, cmd.length)
+
+        return {loginProcess: true, msg: ["Username: " + this.username], style: ""};
+    }
+    help(){
+        return [
+            "Syntax:  login [OPTIONS]",
+            "  OPTIONS:",
+            "    -help               Display this help text",
+            "    -u [USERNAME]       Set username to login",
+        ]
     }
     isRoot = false;
     username = "";
     async checkLogin(pwd) {
-        if (pwd == "timo") {
-            console.log("really?")
+        var response = await fetch("https://id.gabrikowski.de/login", {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({username: this.username, password: pwd}),
+        })
+        if (response.ok) {
              this.isRoot = true;
+             var data = await response.json();
+             var newAuthService = new authService(data.token);
+             tokenVault = newAuthService;
              return true;
         } else {
             return false;
@@ -75,4 +96,32 @@ class securityService extends service {
     logout(){
         this.isRoot = false;
     }
+}
+
+class authService {
+    constructor(token) {
+        this.accessToken = token;
+    }
+    addAuthHeader(headers){
+        headers.append('Authorization', 'GID ' + this.accessToken);
+        return headers;
+    }
+}
+tokenVault = new authService("none");
+
+class blogService extends service{
+    constructor(name) {
+        super(name);
+    }
+
+    async getList(){
+        var headers = new Headers();
+        headers.append("content-type", "application/json")
+        var resonse = await fetch(API_HOST + "/blog/entries", {
+            method: "GET",
+            headers: tokenVault.addAuthHeader(headers),
+        })
+        return await resonse.json();
+    }
+
 }

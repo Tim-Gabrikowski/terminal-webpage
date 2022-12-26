@@ -50,7 +50,7 @@ async function enterKey(e) {
 				);
 				liner.classList.remove("password");
 			} else {
-				addLine("Wrong password", "error", 0);
+				loopLines(["Wrong credentials given"], "error", 80);
 				command.innerHTML = "";
 				textarea.value = "";
 				pw = false;
@@ -99,22 +99,26 @@ async function enterKey(e) {
 let defaultservice = new service("default");
 let helpservice = new helpService("help");
 let welcomeservice = new welcomeService("welcome");
+let blogservice = new blogService("blog");
 
-function commander(cmd) {
+async function commander(cmd) {
 	// DEFINE COMMANDS HERE
 
 	switch (cmd.toLowerCase()) {
 		// help
-		case "help":
-			loopLines(helpService.help(), "color2 margin", 80);
+		case cmd.startsWith("help") ? cmd : "" :
+			loopLines(helpService.help(cmd), "color2 margin", 80);
 			break;
 
 		//login
 		case cmd.startsWith("login") ? cmd : "" :
 			if (!securityservice.isRoot) {
-				securityservice.on(cmd.substring(6, cmd.length));
-				liner.classList.add("password");
-				pw = true;
+				var res = securityservice.on(cmd.substring(6, cmd.length));
+				if(res.loginProcess){
+					liner.classList.add("password");
+					pw = true;
+				}
+				loopLines(res.msg, res.style, 80);
 			} else {
 				addLine("Already logged in", "", 0);
 			}
@@ -126,6 +130,7 @@ function commander(cmd) {
 			loopLines(commands, "color2", 80);
 			addLine("<br>", "command", 80 * commands.length + 50);
 			break;
+
 
 		case cmd.startsWith("sudo") ? cmd : "" :
 			if(!securityservice.isRoot) {
@@ -146,6 +151,17 @@ function commander(cmd) {
 				terminal.innerHTML = '<a id="before"></a>';
 				before = document.getElementById("before");
 			}, 1);
+			break;
+
+
+		case "blog":
+			var list = await blogservice.getList();
+			var lines = ["<span class=\"color2\">List of Blog posts:</span>", "<br>"];
+			list.forEach(entry => {
+				lines.push(" - " + entry.title)
+			})
+			lines.push("<br>")
+			loopLines(lines, "", 80);
 			break;
 
 		// service-test
